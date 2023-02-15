@@ -14,5 +14,16 @@ module.exports = {
       },
     ],
     'react-native-reanimated/plugin',
+    [
+      'babel-plugin-root-import',
+      {
+        paths: [
+          {
+            rootPathSuffix: './src/',
+            rootPathPrefix: 'src/',
+          },
+        ],
+      },
+    ],
   ],
-}
+};

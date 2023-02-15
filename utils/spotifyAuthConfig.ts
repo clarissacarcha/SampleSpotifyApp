@@ -1,9 +1,9 @@
-import { CLIENT_ID, REDIRECT_URL } from '@env'
-import { Platform } from 'react-native'
+import { CLIENT_ID, REDIRECT_URL } from '@env';
+import { Platform } from 'react-native';
 
 export const spotifyAuthConfig = {
-  clientId: CLIENT_ID,
-  redirectUrl: REDIRECT_URL,
+  clientId: 'c5aa8b28820148718bc5e6e60e849ed0',
+  redirectUrl: 'com.spotifyclone://oauth/',
   usePKCE: false,
   dangerouslyAllowInsecureHttpRequests: true,
   issuer: 'https://accounts.spotify.com',
@@ -22,9 +22,6 @@ export const spotifyAuthConfig = {
   ],
   serviceConfiguration: {
     authorizationEndpoint: 'https://accounts.spotify.com/authorize',
-    tokenEndpoint:
-      Platform.OS === 'ios'
-        ? 'http://localhost:4000/api/user/authentication'
-        : 'http://10.0.2.2:4000/api/user/authentication',
+    tokenEndpoint: Platform.OS === 'ios' ? 'http://192.168.0.30:4000/api/user/authentication' : 'http://192.168.0.30:4000/api/user/authentication',
   },
-}
+};

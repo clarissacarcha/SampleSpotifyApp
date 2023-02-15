@@ -1,63 +1,48 @@
-import React, { useEffect } from 'react'
-import { StatusBar } from 'react-native'
-import SplashScreen from 'react-native-splash-screen'
-import { NavigationContainer } from '@react-navigation/native'
-import AsyncStorage from '@react-native-async-storage/async-storage'
-import {
-  CardStyleInterpolators,
-  createStackNavigator,
-} from '@react-navigation/stack'
+import React, { useEffect } from 'react';
+import { StatusBar } from 'react-native';
+import SplashScreen from 'react-native-splash-screen';
+import { NavigationContainer } from '@react-navigation/native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { CardStyleInterpolators, createStackNavigator } from '@react-navigation/stack';
 
-import { RootStackParamList } from './screens/RootStackParams'
-import { LoadingSpinner } from './components'
-import { useAppSelector, useAppDispatch } from './hooks/redux-hooks'
-import { Authorize, TrackPlayer } from './screens'
-import HomeTabs from './navigation/HomeTabs'
+import { RootStackParamList } from './screens/RootStackParams';
+import { LoadingSpinner } from './components';
+import { useAppSelector, useAppDispatch } from './hooks/redux-hooks';
+import { Authorize, TrackPlayer } from './screens';
+import HomeTabs from './navigation/HomeTabs';
 
-import {
-  setTokens,
-  requestRefreshedAccessTokenAsync,
-} from './store/slices/authSlice'
+import { setTokens, requestRefreshedAccessTokenAsync } from './store/slices/authSlice';
 
-const Stack = createStackNavigator<RootStackParamList>()
+const Stack = createStackNavigator<RootStackParamList>();
 
 const App = () => {
-  const auth = useAppSelector((state) => state.auth)
-  const dispatch = useAppDispatch()
+  const auth = useAppSelector((state) => state.auth);
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
-    SplashScreen.hide()
-  }, [])
+    SplashScreen.hide();
+  }, []);
 
   useEffect(() => {
     const tryLogin = async () => {
-      const authData = await AsyncStorage.getItem('authData')
-      if (!authData) return
-      const { accessToken, refreshToken, accessTokenExpirationDate } =
-        await JSON.parse(authData)
-      if (
-        new Date(accessTokenExpirationDate) <= new Date() ||
-        !accessToken ||
-        !refreshToken
-      ) {
-        dispatch(requestRefreshedAccessTokenAsync(refreshToken))
-        return
-      }
-      dispatch(setTokens({ accessToken, refreshToken }))
-    }
-    tryLogin()
-  }, [dispatch])
+      const authData = await AsyncStorage.getItem('authData');
 
-  if (auth.tokenIsLoading) return <LoadingSpinner />
+      if (!authData) return;
+      const { accessToken, refreshToken, accessTokenExpirationDate } = await JSON.parse(authData);
+      if (new Date(accessTokenExpirationDate) <= new Date() || !accessToken || !refreshToken) {
+        dispatch(requestRefreshedAccessTokenAsync(refreshToken));
+        return;
+      }
+      dispatch(setTokens({ accessToken, refreshToken }));
+    };
+    tryLogin();
+  }, [dispatch]);
+
+  if (auth.tokenIsLoading) return <LoadingSpinner />;
 
   return (
     <>
-      <StatusBar
-        translucent={true}
-        animated={true}
-        backgroundColor={'transparent'}
-        barStyle={'light-content'}
-      />
+      <StatusBar translucent={true} animated={true} backgroundColor={'transparent'} barStyle={'light-content'} />
       <NavigationContainer>
         <Stack.Navigator
           initialRouteName='Home'
@@ -83,7 +68,7 @@ const App = () => {
         </Stack.Navigator>
       </NavigationContainer>
     </>
-  )
-}
+  );
+};
 
-export default App
+export default App;
